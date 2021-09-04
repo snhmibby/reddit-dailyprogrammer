@@ -5,6 +5,9 @@
 #include <string.h>
 #include <math.h>
 
+//DISCLAIMER, i wrote this some years ago after i haven't programmed in some
+//years... The lexer seems buggy, but I don't want to fix it.
+
 #define NAME_MAX 1024
 // operators are in order of precedence
 struct token {
@@ -324,6 +327,8 @@ exec(int op)
 	pushvalue(result);
 }
 
+//XXX doesn't do associativity (left-right/right-left)
+//i.e. 5 - 1 - 1 will be 5, not 3...
 int
 main(int argc, char **argv)
 {
