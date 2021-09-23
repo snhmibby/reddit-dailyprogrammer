@@ -3,7 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* naive algorithm: generate all paths, memorize the longest */
+/* Snake on a hypercube problem.  A hypercube is a multidimensional cube...
+ * i.e. a 1 dimensional hypercube is a line, a 2 dimensional is a rectangle, 3
+ * dimensional a cube, a 4 dimensional would be 2 cubes, each corner of one
+ * cube connected to its mirror in the other, and so on.  naive algorithm:
+ * generate all paths, memorize the longest.
+ *
+ * A 'snake' is a path on this hypercube/graph where each node has a minimum
+ * distance of 2 edges to nodes in the graph that are not its direct neigbours
+ * in the path.
+ */
+
 
 #define NUMCORNERS (1 << dimensions)
 int dimensions;
@@ -15,6 +25,7 @@ int longest_path_length = -1;
 #define LOOP_NEIGHBOURS(C, N, I) \
 	for (I = 0, N = C ^ 1; I < dimensions; ++I, N = C ^ (1 << I))
 
+//simple brute force
 void
 visit(int corner, int pathlen)
 {

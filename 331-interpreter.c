@@ -133,6 +133,7 @@ collect_name(char *name)
 			name[i++] = c;
 	}
 	name[i] = 0;
+	ungetc(c, stdin);
 }
 
 void
@@ -221,7 +222,11 @@ lex()
 				errx(1, "bad input: %c.\n", c);
 				break;
 		}
-		expect = OPERAND;
+		if (token.what != LBRACK) {
+			expect = OPERAND;
+		} else {
+			expect = OPERATOR;
+		}
 	}
 
 	return token;
@@ -329,6 +334,7 @@ exec(int op)
 
 //XXX doesn't do associativity (left-right/right-left)
 //i.e. 5 - 1 - 1 will be 5, not 3...
+//it does do operator precedence
 int
 main(int argc, char **argv)
 {
