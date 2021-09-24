@@ -5,9 +5,6 @@
 #include <string.h>
 #include <math.h>
 
-//DISCLAIMER, i wrote this some years ago after i haven't programmed in some
-//years... The lexer seems buggy, but I don't want to fix it.
-
 #define NAME_MAX 1024
 // operators are in order of precedence
 struct token {
@@ -244,7 +241,7 @@ int value_idx = 0, op_idx = 0;
 void
 pushvalue(struct token t)
 {
-	if (value_idx + 1 == STK_MAX)
+	if (value_idx + 1 >= STK_MAX)
 		errx(1, "value stack is full\n");
 	
 	valuestack[value_idx++] = t;
@@ -253,7 +250,7 @@ pushvalue(struct token t)
 void
 pushop(struct token t)
 {
-	if (op_idx + 1 == STK_MAX)
+	if (op_idx + 1 >= STK_MAX)
 		errx(1, "operand stack is full\n");
 	opstack[op_idx++] = t;
 }
@@ -261,7 +258,7 @@ pushop(struct token t)
 int
 popop(void)
 {
-	if (op_idx-- == 0)
+	if (op_idx-- <= 0)
 		errx(1, "operand stack is empty\n");
 	return opstack[op_idx].what;
 }
@@ -269,7 +266,7 @@ popop(void)
 int
 peekop(void)
 {
-	if (op_idx == 0)
+	if (op_idx <= 0)
 		return 0;
 	else return opstack[op_idx-1].what;
 }
@@ -277,7 +274,7 @@ peekop(void)
 double
 popval(void)
 {
-	if (value_idx-- == 0)
+	if (value_idx-- <= 0)
 		errx(1, "value stack is empty\n");
 	struct token *this = valuestack + value_idx;
 	if (this->what == VAR)
@@ -288,7 +285,7 @@ popval(void)
 char *
 poplval(void)
 {
-	if (value_idx-- == 0)
+	if (value_idx-- <= 0)
 		errx(1, "value stack is empty\n");
 	struct token *this = valuestack + value_idx;
 	if (this->what != VAR)
